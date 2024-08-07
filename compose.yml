@@ -1,0 +1,27 @@
+services:
+  wpdb:
+    image: mariadb:10.8
+    environment:
+      MARIADB_ROOT_PASSWORD: root-pass
+      MARIADB_DATABASE: database
+      MARIADB_USER: wp-user
+      MARIADB_PASSWORD: wp-pass
+    volumes:
+      - db-data:/var/lib/mysql
+
+  wordpress:
+    image: wordpress:6.5
+    depends_on:
+      - wpdb
+    environment:
+      WORDPRESS_DB_HOST: wpdb
+      WORDPRESS_DB_NAME: database
+      WORDPRESS_DB_USER: wp-user
+      WORDPRESS_DB_PASSWORD: wp-pass
+    ports:
+      - "80:80"    
+    volumes:
+      - wp-data:/var/www/html
+volumes:
+  db-data:
+  wp-data:
